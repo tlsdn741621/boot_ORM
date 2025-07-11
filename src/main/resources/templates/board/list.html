@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <title>list화면</title>
 </head>
-<body>
+
 <div layout:fragment="content">
 
     <!--    검색 화면 추가-->
@@ -77,11 +77,13 @@
                             <th scope="col">RegDate</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody th:with="link = ${pageRequestDTO.link}">
                         <tr th:each="dto: ${responseDTO.dtoList}">
                             <th scope="row">[[${dto.bno}]]</th>
                             <td>
-                                [[${dto.title}]]
+                                <a th:href="|@{/board/read(bno = ${dto.bno})}&${link}|">
+                                    [[${dto.title}]]
+                                </a>
                             </td>
                             <td>
                                 [[${dto.writer}]]
@@ -176,5 +178,5 @@
     }
 
 </script>
-</body>
+
 </html>

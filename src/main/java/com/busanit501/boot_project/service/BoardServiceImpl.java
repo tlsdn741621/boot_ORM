@@ -32,7 +32,9 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public Long register(BoardDTO boardDTO) {
         // 변환 먼저하기.
+        log.info("보드 서비스 구현체, 등록 과정 중에 변환된 boardDTO 확인 : " + boardDTO);
         Board board = modelMapper.map(boardDTO, Board.class);
+        log.info("보드 서비스 구현체, 등록 과정 중에 변환된 board 확인 : " + board);
         // 실제 디비에 쓰기 작업.
         Long bno = boardRepository.save(board).getBno();
         return bno;

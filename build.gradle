@@ -68,6 +68,10 @@ dependencies {
     //6
     // 서버 입장에서 입력된 데이터 유효성 검증 도구
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.4.0'
+
+    // 7
+    // Rest 테스트 도구, 스웨거 설치,
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.7.0'
 }
 
 tasks.named('test') {

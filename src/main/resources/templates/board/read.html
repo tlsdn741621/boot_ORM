@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!--순서1
+: 타임리프 메타 태그 설정 -->
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="www.thymeleaf.org"
+      layout:decorate="~{layout/basic.html}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>read화면</title>
+</head>
+<!--순서2, basic.html 템플릿을 사용중이고, -->
+<!--우리는, layout:fragment="content" 여기에,read.html 내용이 들어감-->
+<div layout:fragment="content">
+    <!--        여기 부분이, basic.html의 layout:fragment="content" 영역에-->
+    <!--        표기 되는 부분-->
+    <!--        register.html 의 내용을 재사용.-->
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Board Read
+                </div>
+                <div class="card-body">
+                    <!--                        폼 형식 작성하기-->
+                    <form method="post" action="/board/update">
+                        <div class="mb-3">
+                            <label for="bno" class="form-control">bno</label>
+                            <input type="text" class="form-control" id="bno" name="bno"
+                                   th:value="${dto.bno}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="title" class="form-control">제목</label>
+                            <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력해주세요"
+                                   th:value="${dto.title}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-control">내용</label>
+                            <textarea type="text" class="form-control col-sm-5" id="content"
+                                      name="content" rows="5" placeholder="내용을 입력해주세요"
+                                      readonly
+                            >[[${dto.content}]]</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="writer" class="form-control">작성자</label>
+                            <input type="text" class="form-control" id="writer" name="writer"
+                                   placeholder="지금은 직접 작성자를 입력해주세요, 로그인 후 로그인 유저가 자동으로 탑재됨."
+                                   th:value="${dto.writer}" readonly
+                            >
+                        </div>
+                        <!--                            등록시간과, 수정시간 표기해보기-->
+                        <div class="mb-3">
+                            <label for="regDate" class="form-control">등록시간</label>
+                            <input type="text" class="form-control" id="regDate" name="regDate"
+                                   th:value="${#temporals.format(dto.regDate,'yyyy-MM-dd HH:mm:ss')}" readonly
+                            >
+                        </div>
+                        <div class="mb-3">
+                            <label for="modDate" class="form-control">수정시간</label>
+                            <input type="text" class="form-control" id="modDate" name="modDate"
+                                   th:value="${#temporals.format(dto.modDate,'yyyy-MM-dd HH:mm:ss')}" readonly
+                            >
+                        </div>
+
+                        <div class="mb-3" th:with="link = ${pageRequestDTO.link}">
+                            <!--                           예시 url
+                                                            http://localhost:8080/board/update
+                                                            ?bno=12
+                                                            &page=1&keyword=1&type=twc-->
+
+                            <a th:href="|@{/board/update}?bno=${dto.bno}&${link}|">
+                                <button type="button" class="btn btn-primary ">수정하기</button>
+                            </a>
+                            <a th:href="|@{/board/list}?${link}|">
+                                <button type="button" class="btn btn-secondary">목록가기</button>
+                            </a>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+</html>
