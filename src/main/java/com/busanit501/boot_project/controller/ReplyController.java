@@ -1,6 +1,7 @@
 package com.busanit501.boot_project.controller;
 
 import com.busanit501.boot_project.dto.ReplyDTO;
+import com.busanit501.boot_project.service.ReplyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,6 +22,7 @@ import java.util.Map;
 @Log4j2
 @RequiredArgsConstructor
 public class ReplyController {
+    private final ReplyService replyService;
     // JSON 데이터 타입의 기본 모양, { "키" : 값, "키2":값2,... }
     // MIME 타입, -> MediaType.APPLICATION_JSON_VALUE
     //{
@@ -43,8 +45,9 @@ public class ReplyController {
     // 전달 내용.
     // 1) http status code , 200 ok, 2) 데이터 내용
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String,Long>> register( @Valid @RequestBody ReplyDTO replyDTO,
-                                                      BindingResult bindingResult) throws BindException
+//    public ResponseEntity<Map<String,Long>> register( @Valid @RequestBody ReplyDTO replyDTO,
+    public Map<String,Long> register( @Valid @RequestBody ReplyDTO replyDTO,
+                                      BindingResult bindingResult) throws BindException
     {
         log.info("ReplyController에서 작업중, 댓글 작성작업");
 
@@ -52,9 +55,14 @@ public class ReplyController {
             throw new BindException(bindingResult);
         }
 
-        log.info("replyDTO : " + replyDTO);
+        log.info("ReplyController에서 작업중 replyDTO : " + replyDTO);
         // 화면이 없어서, 하드코딩으로 더미 데이터 만들기.
-        Map<String,Long> resultMap = Map.of("rno",100L);
-        return ResponseEntity.ok(resultMap);
+//        Map<String,Long> resultMap = Map.of("rno",100L);
+        // 실제로, 데이터를 받아서, 디비에 저장하기.
+        Map<String,Long> resultMap = new HashMap<>();
+        Long rno = replyService.register(replyDTO);
+        resultMap.put("rno",rno);
+
+        return resultMap;
     }
 }

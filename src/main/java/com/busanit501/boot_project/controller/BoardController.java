@@ -1,6 +1,7 @@
 package com.busanit501.boot_project.controller;
 
 import com.busanit501.boot_project.dto.BoardDTO;
+import com.busanit501.boot_project.dto.BoardListReplyCountDTO;
 import com.busanit501.boot_project.dto.PageRequestDTO;
 import com.busanit501.boot_project.dto.PageResponseDTO;
 import com.busanit501.boot_project.service.BoardService;
@@ -25,7 +26,10 @@ public class BoardController {
     @GetMapping("/list")
     public void list(PageRequestDTO pageRequestDTO, Model model) {
         // 서비스 외주 이용해서, 데이터 가져오기
-        PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
+        // 1, 기존, 페이징 정보와, 검색 정보만 이용한 리스트 목록,
+//        PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
+        //2. 기존 + 댓글 갯수 포함 목록 정보.
+        PageResponseDTO<BoardListReplyCountDTO> responseDTO = boardService.listWithReplyCount(pageRequestDTO);
         log.info("BoardController에서, list, responseDTO : {}", responseDTO);
         // 서버 -> 화면으로 데이터 전달.
         model.addAttribute("responseDTO", responseDTO);

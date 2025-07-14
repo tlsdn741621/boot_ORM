@@ -3,6 +3,7 @@ package com.busanit501.boot_project.service;
 
 import com.busanit501.boot_project.domain.Board;
 import com.busanit501.boot_project.dto.BoardDTO;
+import com.busanit501.boot_project.dto.BoardListReplyCountDTO;
 import com.busanit501.boot_project.dto.PageRequestDTO;
 import com.busanit501.boot_project.dto.PageResponseDTO;
 import com.busanit501.boot_project.repository.BoardRepository;
@@ -108,6 +109,26 @@ public class BoardServiceImpl implements BoardService{
         return PageResponseDTO.<BoardDTO>withAll()
                 .pageRequestDTO(pageRequestDTO)
                 .dtoList(dtoList)
+                .total((int)result.getTotalElements())
+                .build();
+    }
+
+    @Override
+    public PageResponseDTO<BoardListReplyCountDTO> listWithReplyCount(PageRequestDTO pageRequestDTO) {
+        // type = "twc" -> getTypes -> {"t","c","w"}
+        // 화면으로 부터 전달 받은,
+        // 1)검색 조건과 2)페이징 정보
+        String[] types = pageRequestDTO.getTypes();
+        String keyword = pageRequestDTO.getKeyword();
+        Pageable pageable = pageRequestDTO.getPageable("bno");
+
+        //2) result : 보드 레포지토리 테스트에서, 관련 정보 확인 해주세요.
+        Page<BoardListReplyCountDTO> result = boardRepository.searchWithReplyCount(types,keyword,pageable);
+
+
+        return PageResponseDTO.<BoardListReplyCountDTO>withAll()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(result.getContent())
                 .total((int)result.getTotalElements())
                 .build();
     }

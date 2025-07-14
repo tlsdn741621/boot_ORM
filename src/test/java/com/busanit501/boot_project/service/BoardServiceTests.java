@@ -1,6 +1,7 @@
 package com.busanit501.boot_project.service;
 
 import com.busanit501.boot_project.dto.BoardDTO;
+import com.busanit501.boot_project.dto.BoardListReplyCountDTO;
 import com.busanit501.boot_project.dto.PageRequestDTO;
 import com.busanit501.boot_project.dto.PageResponseDTO;
 import lombok.extern.log4j.Log4j2;
@@ -62,4 +63,20 @@ public class BoardServiceTests {
         PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
         log.info("서비스 테스트 작업 중, responseDTO : " + responseDTO);
     }
+
+    @Test
+    public void testSearchWithReplyCount() {
+        // 화면으로부터 전달 받은 , 페이징 정보, 검색 정보, 더미 데이터 만들기.
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .type("tcw")
+                .keyword("ㅇ")
+                .page(1)
+                .size(10)
+                .build();
+
+        PageResponseDTO<BoardListReplyCountDTO> responseDTO = boardService.listWithReplyCount(pageRequestDTO);
+        log.info("서비스 테스트 작업 중2, responseDTO : " + responseDTO);
+
+    }
+
 }

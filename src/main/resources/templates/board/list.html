@@ -84,6 +84,10 @@
                                 <a th:href="|@{/board/read(bno = ${dto.bno})}&${link}|">
                                     [[${dto.title}]]
                                 </a>
+                                <!--                                서버로부터 전달받은 데이터 내용중에서, 댓글 갯수 표기-->
+                                <span class="badge progress-bar-success" style="background-color: #fe010a">
+                                    [[${dto.replyCount}]]
+                                </span>
                             </td>
                             <td>
                                 [[${dto.writer}]]
