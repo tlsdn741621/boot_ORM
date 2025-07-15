@@ -1,5 +1,7 @@
 package com.busanit501.boot_project.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -25,5 +27,9 @@ public class ReplyDTO {
     @NotEmpty
     private String replyer;
 
-    private LocalDateTime regDate, modDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime regDate;
+
+    @JsonIgnore // 서버에서, 화면에 전달을 안함.
+    private LocalDateTime modDate;
 }

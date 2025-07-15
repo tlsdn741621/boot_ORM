@@ -5,7 +5,7 @@ http://localhost:8080/swagger-ui/index.html
 2.
 Request body 항목에 아래의 내용 추가
 {
-  "bno": 107,
+  "bno": 104,
   "replyText": "새 댓글 테스트 스웨거 확인",
   "replyer": "이상용"
 

@@ -1,16 +1,20 @@
 package com.busanit501.boot_project.controller.advice;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindException;
+import org.springframework.validation.BindException;// 경로 주의,!!
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 @Log4j2
@@ -35,5 +39,37 @@ public class CustomRestAdvice {
         // 2) body(errorMap); 데이터 전달, 구체적인 오류의 내용들.
         return ResponseEntity.badRequest().body(errorMap);
     }
+
+    // 잘못된 값이 들어오는 경우의 예외처리.
+    // 예) 게시글이 110번이 없는데, 110번 게시글에 댓글을 달기 위한 액션한다.
+    // 데이터 무결성 참조 오류
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
+    public ResponseEntity<Map<String,String>> handleFKException(DataIntegrityViolationException e){
+        log.error(e);
+
+        Map<String,String> errorMap = new HashMap<>();
+
+        errorMap.put("time","" +System.currentTimeMillis());
+        errorMap.put("msg",e.getMessage());
+        // ResponseEntity 이용해서, 1) 상태코드 400(잘못된 요청) 2) 오류 원인 메세지
+        // 서버 -> 화면, 응답한다.
+        return ResponseEntity.badRequest().body(errorMap);
+
+    }
+
+    // NoSuchElement 예외처리,
+    @ExceptionHandler({NoSuchElementException.class,
+            EmptyResultDataAccessException.class})
+    @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
+    public ResponseEntity<Map<String,String>> handleNoSuchElementException(Exception e){
+        log.error(e);
+        Map<String,String> errorMap = new HashMap<>();
+        errorMap.put("time","" +System.currentTimeMillis());
+        errorMap.put("msg",e.getMessage());
+        return ResponseEntity.badRequest().body(errorMap);
+    }
+
+
 
 }
