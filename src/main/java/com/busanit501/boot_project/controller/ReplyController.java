@@ -113,6 +113,7 @@ public class ReplyController {
     public Map<String,Long> modify(@PathVariable Long rno,
                                    @RequestBody ReplyDTO replyDTO) {
         log.info("ReplyController에서 작업중, 수정, 전달받은 rno 확인 :  " + rno);
+        log.info("ReplyController에서 작업중, 수정, 전달받은 replyDTO 확인 :  " + replyDTO);
         replyDTO.setRno(rno);
         replyService.modify(replyDTO);
         Map<String,Long> resultMap = new HashMap<>();

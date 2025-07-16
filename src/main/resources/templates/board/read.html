@@ -93,7 +93,7 @@
 
             <!--    댓글 목록 화면-->
             <ul class="list-group replyList">
-
+                <!--                자바스크립트 이용해서, 태그를 동적으로 주입 합니다.-->
             </ul>
         </div>
 
@@ -103,7 +103,7 @@
         <div class="col">
             <!--            <ul class="pagination replyPaging">-->
             <ul class="pagination flex-wrap justify-content-center replyPaging">
-
+                <!--                자바스크립트 이용해서, 태그를 동적으로 주입 합니다.-->
             </ul>
         </div>
     </div>
@@ -333,6 +333,7 @@
 
         // reply.js 에 있는 함수 이용. getReply
         getReply(rno).then(reply => {
+            // 서버로부터, 댓글 하나 조회 후, 모달창에 데이터 출력하기
             console.log(reply)
             replyHeader.innerHTML = reply.rno
             modifyText.value = reply.replyText
@@ -359,6 +360,55 @@
         const pageNum = target.getAttribute("data-page")
         page = pageNum
         printReplies(page,size)
+    },false)
+
+
+    // 댓글 수정해보기. 이벤트 리스너 작업,
+    // 댓글 등록 과정과 비슷해서, 구조를 복사하고 수정하기.
+    // 댓글의 내용을 담아서, 서버에 전달하기.
+    modifyBtn.addEventListener("click", function (e) {
+        const replyObj = {
+            bno : bno,
+            rno : replyHeader.innerHTML,
+            replyText : modifyText.value,
+            replyer : modifyReplyer.value // 임시로 연습용으로함, 나중에 변경 예정.
+        }
+        // 비동기 처리, reply.js 에서, modifyReply 이용하기.
+        modifyReply(replyObj).then(result => {
+            alert(result.rno + "댓글 수정 완료")
+            modifyModal.hide()
+            modifyText.value = ""
+            modifyReplyer.value = ""
+            // 댓글 수정 후, 맨 마지막 페이지 이동.
+            printReplies(page,size)
+        }).catch(e => {
+            alert("예외가 발생했습니다.")
+        })
+    },false)
+
+    // 수정 모달창 닫기.
+    closeModifyBtn.addEventListener("click", function (e) {
+        modifyModal.hide()
+    },false)
+
+
+    // 삭제 이벤트 리스너 추가하기. 위에 있는 수정 리스너를 재사용.
+    // removeBtn
+    removeBtn.addEventListener("click", function (e) {
+
+        // 비동기 처리, reply.js 에서, removeReply 이용하기.
+        // 모달창 헤더 부분에, 댓글의 번호 rno 있음.
+        removeReply(replyHeader.innerHTML).then(result => {
+            alert(result.rno + "댓글 삭제 완료")
+            modifyModal.hide()
+            modifyText.value = ""
+            modifyReplyer.value = ""
+            // 댓글 삭제 후, 맨 첫 페이지 이동.
+            page = 1
+            printReplies(page,size)
+        }).catch(e => {
+            alert("예외가 발생했습니다.")
+        })
     },false)
 
     // 참고하기.

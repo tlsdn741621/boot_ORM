@@ -36,4 +36,8 @@ public class Reply extends BaseEntity {
     public void changeReplyText(String text) {
         this.replyText = text;
     }
+    // 임시로 , 댓글 작성자 수정 연습해보기.
+    public void changeReplyer(String replyer) {
+        this.replyer = replyer;
+    }
 }

@@ -27,10 +27,10 @@ async function getList({bno, page, size, goLast}){
         {params : {page,size}})
 
     // 댓글의 마지막 가는 여부를 체크해서, 가장 맨끝에 바로가기,
-    if (goLast) {
+    if(goLast) {
         const total = result.data.total
         const lastPage = parseInt(Math.ceil(total/size))
-        return getList({bno:bno,page:lastPage,size:size})
+        return getList({bno:bno,page:lastPage, size:size})
     }
 
     return result.data
@@ -40,6 +40,7 @@ async function getList({bno, page, size, goLast}){
 async function addReply(replyObj) {
     const response = await axios.post(`/replies/`, replyObj)
     return response.data
+
 }
 
 // 댓글 하나 조회.
@@ -51,5 +52,11 @@ async function getReply(rno) {
 // 댓글 수정
 async function modifyReply (replyObj) {
     const response = await axios.put(`/replies/${replyObj.rno}`, replyObj)
+    return response.data
+}
+
+// 댓글 삭제
+async function removeReply (rno) {
+    const response = await axios.delete(`/replies/${rno}`)
     return response.data
 }
