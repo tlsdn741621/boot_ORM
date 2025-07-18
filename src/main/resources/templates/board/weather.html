@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>부산 대기질 정보</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        #resultContainer {
+            border: 1px solid #ccc;
+            padding: 15px;
+            min-height: 100px;
+            background-color: #f9f9f9;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<h1>부산 대기질 정보</h1>
+
+<button id="getDataBtn">데이터 가져오기</button>
+
+<div id="resultContainer">
+    <div id="dataResult">여기에 대기질 데이터가 표시됩니다.</div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const getDataBtn = document.getElementById('getDataBtn');
+        const dataResult = document.getElementById('dataResult');
+
+        if (getDataBtn) {
+            getDataBtn.addEventListener('click', function () {
+                dataResult.textContent = '데이터를 불러오는 중...';
+                dataResult.classList.remove('error-message');
+
+                fetch('/weather/data')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP 오류: ${response.status} ${response.statusText}`);
+                        }
+                        // JSON으로 파싱
+                        return response.json();
+                    })
+                    .then(data => {
+                        // data 구조 확인 후 item 배열 추출
+                        const items = data.response?.body?.items?.item;
+                        if (!items || items.length === 0) {
+                            dataResult.textContent = '표시할 데이터가 없습니다.';
+                            return;
+                        }
+
+                        // 각 아이템 정보를 HTML로 변환
+                        let html = '';
+                        items.forEach(item => {
+                            html += `
+                                <div style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd;">
+                                    <h3>${item.site}</h3>
+                                    <p><strong>대표 항목:</strong> ${item.repItem} (${item.repVal})</p>
+                                    <p><strong>PM2.5:</strong> ${item.pm25}, <strong>PM10:</strong> ${item.pm10}</p>
+                                    <p><strong>SO2:</strong> ${item.so2}, <strong>NO2:</strong> ${item.no2}, <strong>O3:</strong> ${item.o3}, <strong>CO:</strong> ${item.co}</p>
+                                </div>
+                            `;
+                        });
+
+                        dataResult.innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error('데이터 불러오기 실패:', error);
+                        dataResult.textContent = '데이터 불러오기 실패: ' + error.message;
+                        dataResult.classList.add('error-message');
+                    });
+            });
+        } else {
+            console.error("ID 'getDataBtn'을 가진 버튼을 찾을 수 없습니다.");
+        }
+    });
+</script>
+</body>
+</html>

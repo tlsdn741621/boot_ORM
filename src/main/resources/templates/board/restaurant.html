@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>부산 맛집 정보</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+        h1 {
+            color: #28a745; /* Green color for restaurant theme */
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px 25px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #28a745; /* Green button */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #resultContainer {
+            margin-top: 25px;
+            border: 1px solid #ced4da;
+            padding: 20px;
+            min-height: 200px;
+            background-color: #e9f5ee; /* Light green background */
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        .loading-message {
+            color: #17a2b8;
+            font-weight: bold;
+        }
+        .error-message {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>부산 맛집 정보</h1>
+
+    <button id="getRestaurantDataBtn">맛집 데이터 가져오기</button>
+
+    <div id="resultContainer">
+        <pre id="restaurantDataResult">여기에 맛집 데이터가 표시됩니다.</pre>
+    </div>
+</div>
+
+<script>
+    document.getElementById('getRestaurantDataBtn').addEventListener('click', function() {
+        const resultContainer = document.getElementById('resultContainer');
+        const restaurantDataResult = document.getElementById('restaurantDataResult');
+        restaurantDataResult.textContent = '맛집 데이터를 불러오는 중...';
+
+        fetch('/restaurant/data')
+            .then(response => {
+                if (!response.ok) throw new Error('네트워크 응답 오류');
+                return response.text();
+            })
+            .then(text => {
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    restaurantDataResult.textContent = '데이터 파싱 실패: ' + e.message;
+                    return;
+                }
+
+                if (data.getFoodKr && data.getFoodKr.item && data.getFoodKr.item.length > 0) {
+                    const items = data.getFoodKr.item;
+                    let html = '<ul class="list-group">';
+                    items.forEach(item => {
+                        html += `<li class="list-group-item">
+                        <h5>${item.MAIN_TITLE}</h5>
+                        <p><strong>주소:</strong> ${item.ADDR1}</p>
+                        <p><strong>전화번호:</strong> ${item.CNTCT_TEL}</p>
+                        <p><strong>운영시간:</strong> ${item.USAGE_DAY_WEEK_AND_TIME}</p>
+                        ${item.MAIN_IMG_THUMB ? `<img src="${item.MAIN_IMG_THUMB}" alt="${item.MAIN_TITLE}" style="max-width:150px;">` : ''}
+                        <p>${item.ITEMCNTNTS ? item.ITEMCNTNTS.replace(/\n/g, '<br>') : ''}</p>
+                    </li>`;
+                    });
+                    html += '</ul>';
+                    resultContainer.innerHTML = html;
+                } else {
+                    restaurantDataResult.textContent = '데이터가 없습니다.';
+                }
+            })
+            .catch(error => {
+                restaurantDataResult.textContent = '데이터 불러오기 실패: ' + error.message;
+            });
+    });
+</script>
+
+</body>
+</html>
