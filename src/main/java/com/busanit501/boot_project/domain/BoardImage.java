@@ -22,7 +22,6 @@ public class BoardImage implements Comparable<BoardImage>{
     @ManyToOne
     private Board board;
 
-    // 오름차순, 내림 차순 정렬 할 때 사용할 예정
     @Override
     public int compareTo(BoardImage other) {
         return this.ord - other.ord;

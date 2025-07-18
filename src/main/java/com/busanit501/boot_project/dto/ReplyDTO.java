@@ -30,6 +30,6 @@ public class ReplyDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime regDate;
 
-    @JsonIgnore // 서버에서, 화면에 전달을 안함.
+    @JsonIgnore
     private LocalDateTime modDate;
 }

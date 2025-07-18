@@ -77,6 +77,9 @@ dependencies {
     // 원본 이미지 -> 작은 이미지 변환 도구,
     // https://mvnrepository.com/artifact/net.coobird/thumbnailator
     implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.20'
+
+    implementation 'org.jsoup:jsoup:1.17.2'
+
 }
 
 tasks.named('test') {

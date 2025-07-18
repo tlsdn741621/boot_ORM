@@ -159,7 +159,6 @@
         e.stopPropagation()
 
         const target = e.target
-        // a 태그 아니면 , 이벤트 처리 안한다., -> a 태그만 이벤트처리 한다.
         if(target.tagName !== 'A') {
             return
         }
@@ -169,13 +168,8 @@
         formObj.submit();
     }, false)
 
-
     const result = [[${result}]]
-    // if(result) {
-    //     alert("글작성 완료 : " + result)
-    // }
 
-    // 모달창 이용해보기.
     const modal = new bootstrap.Modal(document.querySelector(".modal"))
     if (result) {
         modal.show()

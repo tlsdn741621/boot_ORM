@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UploadResultDTO {
-    // 이미지 파일명 :
-    // 썸네일 이미지 : s_ + uuid랜덤문자열_ +파일원본명
     private String uuid;
     private String fileName;
     private boolean img;

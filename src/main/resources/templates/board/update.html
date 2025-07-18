@@ -9,12 +9,8 @@
     <meta charset="UTF-8">
     <title>update화면</title>
 </head>
-<!--순서2, basic.html 템플릿을 사용중이고, -->
-<!--우리는, layout:fragment="content" 여기에,read.html 내용이 들어감-->
+
 <div layout:fragment="content">
-    <!--        여기 부분이, basic.html의 layout:fragment="content" 영역에-->
-    <!--        표기 되는 부분-->
-    <!--        register.html 의 내용을 재사용.-->
     <div class="row mt-3">
         <div class="col">
             <div class="card">
@@ -64,16 +60,6 @@
                         </div>
 
                         <div class="mb-3">
-                            <!--                           예시 url
-                                                            http://localhost:8080/board/update
-                                                            ?bno=12
-                                                            &page=1&keyword=1&type=twc-->
-
-                            <!--                            상세보기 -> 수정화면, 화면이동, get 방식이어서, a태그로, -->
-                            <!--                            쿼리 스트링 형식으로 데이터 전달 가능. -->
-                            <!--                            지금 수정화면에서, 변경된 데이터를 포스트 처리해야함. -->
-                            <!--                            자바스크립트를 이용해서 처리 해야함. -->
-
                             <button type="button" class="btn btn-primary updateBtn">수정하기</button>
                             <button type="button" class="btn btn-secondary listBtn">목록가기</button>
                             <button type="button" class="btn btn-danger removeBtn">삭제가기</button>
@@ -87,8 +73,7 @@
         </div>
     </div>
 </div>
-<!--끝나는 부분 div layout:fragment="content"-->
-<!--자바스크립트 영역은 다른 영역이므로, 분리하기 , 주의-->
+
 <script layout:fragment="script" th:inline="javascript">
 
     const errors = [[${errors}]]

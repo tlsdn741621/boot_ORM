@@ -10,11 +10,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-// 모든 엔티티 테이블에 공통으로 들어가는 필드를 분리,
-// 데이터 추가 된 시간,
-// 수정된 시간,
-// 컬럼이 매번 다른 엔티티 클래스에서 중복 사용하면, 비효율
-// 공통으로 분리해서, 사용.
 @MappedSuperclass
 @EntityListeners(value = {AuditingEntityListener.class})
 @Getter

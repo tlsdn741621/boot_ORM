@@ -26,17 +26,15 @@ public class ReplyRepositoryTests {
 
     @Test
     public void testInsert() {
-        // 댓글 작성 테스트,
-        // 준비물 1) 실제 부모 게시글 존재,
-        Long bno = 108L;
+        // 실제 DB에 존재하는 bno 사용해야 함
+        Long bno = 109L;
 
-        //부모 게시글 더미 데이터,
-        Board board = Board.builder()
-                .bno(bno).build();
+        // 실제로 DB에서 게시글을 조회해야 함
+        Board board = boardRepository.findById(bno).orElseThrow(() ->
+                new IllegalArgumentException("게시글이 존재하지 않습니다: bno = " + bno)
+        );
 
-        // 댓글의 더미 데이터
         Reply reply = Reply.builder()
-                // 부모 게시글 객체는 반드시 필요함.
                 .board(board)
                 .replyText("샘플 게시글 내용4")
                 .replyer("샘플 댓글 작성자4")

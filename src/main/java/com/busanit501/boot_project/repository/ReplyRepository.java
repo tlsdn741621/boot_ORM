@@ -11,6 +11,5 @@ public interface ReplyRepository extends JpaRepository<Reply,Long> {
     @Query("select r from Reply r where r.board.bno = :bno")
     Page<Reply> listOfBoard(Long bno, Pageable pageable);
 
-    // 게시글 번호로, 댓글 삭제하기.
     void deleteByBoard_Bno(Long bno);
 }

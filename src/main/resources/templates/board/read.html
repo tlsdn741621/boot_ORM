@@ -8,13 +8,9 @@
 <head>
     <meta charset="UTF-8">
     <title>read화면</title>
-</head>
-<!--순서2, basic.html 템플릿을 사용중이고, -->
-<!--우리는, layout:fragment="content" 여기에,read.html 내용이 들어감-->
+</head>>
 <div layout:fragment="content">
-    <!--        여기 부분이, basic.html의 layout:fragment="content" 영역에-->
-    <!--        표기 되는 부분-->
-    <!--        register.html 의 내용을 재사용.-->
+
     <div class="row mt-3">
         <div class="col">
             <div class="card">
@@ -22,7 +18,6 @@
                     Board Read
                 </div>
                 <div class="card-body">
-                    <!--                        폼 형식 작성하기-->
                     <form method="post" action="/board/update">
                         <div class="mb-3">
                             <label for="bno" class="form-control">bno</label>
@@ -64,11 +59,6 @@
                         </div>
 
                         <div class="mb-3" th:with="link = ${pageRequestDTO.link}">
-                            <!--                           예시 url
-                                                            http://localhost:8080/board/update
-                                                            ?bno=12
-                                                            &page=1&keyword=1&type=twc-->
-
                             <a th:href="|@{/board/update}?bno=${dto.bno}&${link}|">
                                 <button type="button" class="btn btn-primary ">수정하기</button>
                             </a>
@@ -101,14 +91,12 @@
     <!--    댓글 페이징 화면-->
     <div class="row mt-3">
         <div class="col">
-            <!--            <ul class="pagination replyPaging">-->
             <ul class="pagination flex-wrap justify-content-center replyPaging">
                 <!--                자바스크립트 이용해서, 태그를 동적으로 주입 합니다.-->
             </ul>
         </div>
     </div>
 
-    <!--    댓글 작성하는 모달 폼 창, list.html에 있는 테스트 모달창 가져오기-->
     <!--    모달창 테스트-->
     <div class="modal registerModal" tabindex="-1">
         <div class="modal-dialog">
@@ -175,26 +163,20 @@
     <!--    모달창 테스트-->
     <!--    댓글 수정하는 모달 폼 창-->
 
-    <!--     비동기 통신 하기 위한 도구 설정, axios,-->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!--    우리가 만든 자바스크립 파일, 임포트 : 불러오기-->
     <script src="/js/reply.js"></script>
 
 </div> <!--fragment content end-->
 <script layout:fragment="script" th:inline="javascript">
     const bno = [[${dto.bno}]]
 
-    const replyList = document.querySelector('.replyList')// 댓글 목록 가리킴
-    const replyPaging = document.querySelector('.replyPaging') // 댓글의 페이징 가리킴
+    const replyList = document.querySelector('.replyList')
+    const replyPaging = document.querySelector('.replyPaging')
 
-    // 댓글 목록 출력 함수.  UI 작성,
-    // 자바스크립트로 이너 HTML 이용해서, 문자열로, 태그를 생성해서 주입할 예정.
-    // dtoList, 서버로부터 전달 받은 , 댓글 데이터들.
     function printList(dtoList) {
         let str = '';
         if (dtoList && dtoList.length > 0) {
             for (const dto of dtoList) {
-                // str 문자열 변수 안에, li 태그를 문자열 형태로 주입함.
                 str += `
                         <li class="list-group-item d-flex replyItem">
                         <span class="col-2">${dto.rno}</span>
@@ -208,8 +190,6 @@
         replyList.innerHTML = str
     } // printList end
 
-    // 2 댓글 페이징 화면 출력 함수.  UI 작성,
-    // 자바스크립트로 이너 HTML 이용해서, 문자열로, 태그를 생성해서 주입할 예정.
     function printPages(data) {
         let pageStr = ``
 
@@ -219,7 +199,6 @@
             `
         }
 
-        // 페이징 1,2,3,4,5,6,7,8,9,10 출력.
         for (let i = data.start; i <= data.end; i++) {
             pageStr += `
             <li class="page-item ${i == data.page ? "active" : ""}"><a class="page-link" data-page="${i}">${i}</a></li>
@@ -234,31 +213,17 @@
         replyPaging.innerHTML = pageStr
     }
 
-
-    // 서버로부터, 페이징 처리가 된 댓글의 내용을 받는 함수.
-    // 적용하기.
-    // 1) 목록 출력하는 UI 작성하는 함수에 적용
-    // 2) 목록 페이징을 출력하는 UI 작성하는 함수에 적용
     function printReplies(page, size, goLast) {
-        //reply.js 에서 정의한, getList 함수를 사용해서, 비동기적으로 데이터를 전달 받기.
         getList({bno, page, size, goLast}).then(
-            // 처음에는 , 데이터 받느지 유무를 확인하기위해서, 콘솔에 출력
-            // 두번째, 실제 화면에 적용하기.
-            // data => {console.log(data)}
             data => {
-                printList(data.dtoList) // 댓글 목록 출력
-                printPages(data) // 댓글 페이징 출력
+                printList(data.dtoList)
+                printPages(data)
             }
         ).catch(e => {
             console.error(e)
         })
     }
 
-    // 함수 호출해보기
-    // 댓글의 첫페이지 이동
-    // printReplies(1,10)
-
-    // 댓글의 마지막 페이지 이동
     printReplies(1, 10, true)
 
 
@@ -362,18 +327,14 @@
         printReplies(page,size)
     },false)
 
-
-    // 댓글 수정해보기. 이벤트 리스너 작업,
-    // 댓글 등록 과정과 비슷해서, 구조를 복사하고 수정하기.
-    // 댓글의 내용을 담아서, 서버에 전달하기.
     modifyBtn.addEventListener("click", function (e) {
         const replyObj = {
             bno : bno,
             rno : replyHeader.innerHTML,
             replyText : modifyText.value,
-            replyer : modifyReplyer.value // 임시로 연습용으로함, 나중에 변경 예정.
+            replyer : modifyReplyer.value
         }
-        // 비동기 처리, reply.js 에서, modifyReply 이용하기.
+
         modifyReply(replyObj).then(result => {
             alert(result.rno + "댓글 수정 완료")
             modifyModal.hide()
@@ -392,18 +353,14 @@
     },false)
 
 
-    // 삭제 이벤트 리스너 추가하기. 위에 있는 수정 리스너를 재사용.
-    // removeBtn
+
     removeBtn.addEventListener("click", function (e) {
 
-        // 비동기 처리, reply.js 에서, removeReply 이용하기.
-        // 모달창 헤더 부분에, 댓글의 번호 rno 있음.
         removeReply(replyHeader.innerHTML).then(result => {
             alert(result.rno + "댓글 삭제 완료")
             modifyModal.hide()
             modifyText.value = ""
             modifyReplyer.value = ""
-            // 댓글 삭제 후, 맨 첫 페이지 이동.
             page = 1
             printReplies(page,size)
         }).catch(e => {
@@ -411,21 +368,6 @@
         })
     },false)
 
-    // 참고하기.
-    // console.log(get1(bno))
-    // reply.js 에서, Promise 형태로 데이터를 받고서,
-    //     then, 절과, catch 절을 이용 가능.
-    //     포맷 형태를 좀더 직관적이고, 쉽게 비동기를 동기적 스타일로 표현이 가능함.
-    // get1(bno) : 순서1, 서버로부터 데이터 받기
-    // .then( ) 절 : 순서2, 받은 데이터로 작업하기.
-    // .catch() 절 : 순서3, 오류가 발생시 동작하는 블록.
-    // get1(bno).then(
-    //     data => {
-    //         console.log(data)
-    //     }
-    // ).catch(e => {
-    //     console.error(e)
-    // })
 </script>
 
 
